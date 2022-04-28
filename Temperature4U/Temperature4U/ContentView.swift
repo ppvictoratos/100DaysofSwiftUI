@@ -37,13 +37,19 @@ struct ContentView: View {
         
         //MARK: UI
 
-        //TODO: Text Field to enter a number
-
         //TODO: Segmented Control to choose output unit (Picker)
 
         //TODO: Text View to display result
         
         Form {
+            //TODO: Text Field to enter a number
+            Section {
+                TextField("Input", value: $inputTemp, format: .number)
+                    .keyboardType(.decimalPad)
+            } header: {
+                Text("Input Temperature")
+            }
+            
             //TODO: Segmented Control to choose input unit (Picker)
             Section {
                 Picker("Input Unit", selection: $inputUnit) {
