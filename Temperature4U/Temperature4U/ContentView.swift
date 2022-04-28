@@ -21,7 +21,7 @@ struct ContentView: View {
     //MARK: Properties & Formulas
     @State private var inputTemp = 0.0
     @State private var inputUnit: TemperatureUnit = .celsius
-    @State private var outputTemp = 0.0
+    @State private var outputUnit: TemperatureUnit = .celsius
     let temperatureUnits = ["Celsius", "Fahrenheit", "Kelvin"]
     
     // Celsius to Fahrenheit by multiplying by 9, dividing by 5, then adding 32
@@ -36,12 +36,9 @@ struct ContentView: View {
     var body: some View {
         
         //MARK: UI
-
-        //TODO: Segmented Control to choose output unit (Picker)
-
-        //TODO: Text View to display result
         
         Form {
+            
             //TODO: Text Field to enter a number
             Section {
                 TextField("Input", value: $inputTemp, format: .number)
@@ -60,7 +57,27 @@ struct ContentView: View {
             } header: {
                 Text("Input Unit")
             }
-        }
+            
+            //TODO: Segmented Control to choose output unit (Picker)
+            Section {
+                Picker("Output Unit", selection: $inputUnit) {
+                    ForEach(temperatureUnits, id: \.self) {
+                        Text($0)
+                    }
+                }.pickerStyle(.segmented)
+            } header: {
+                Text("Output Unit")
+            }
+            
+            //TODO: Text View to display result
+            Section {
+                TextField("Input", value: $inputTemp, format: .number)
+                    .keyboardType(.decimalPad)
+            } header: {
+                Text("Input Temperature")
+            }
+            
+        }.navigationTitle("Temperature4U 🌡")
     }
 }
 
