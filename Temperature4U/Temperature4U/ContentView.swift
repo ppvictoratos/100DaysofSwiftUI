@@ -11,73 +11,109 @@
 
 import SwiftUI
 
-enum TemperatureUnit {
-    case celsius
-    case fahrenheit
-    case kelvin
-}
-
 struct ContentView: View {
     //MARK: Properties & Formulas
+    @FocusState private var amountIsFocused: Bool
     @State private var inputTemp = 0.0
-    @State private var inputUnit: TemperatureUnit = .celsius
-    @State private var outputUnit: TemperatureUnit = .celsius
+    @State private var inputUnit = "Celsius"
+    @State private var outputUnit = "Celsius"
     let temperatureUnits = ["Celsius", "Fahrenheit", "Kelvin"]
     
-    // Celsius to Fahrenheit by multiplying by 9, dividing by 5, then adding 32
-    // Fahrenheit to Celsuis by subtracting 32, multiply by 5, divide by 9
+    var computeTemp: Double {
+        
+        //Celsius
+        if inputUnit == "Celsius" {
+            if outputUnit == "Fahrenheit" {
+                return ((inputTemp * 9) / 5) + 32
+            } else if outputUnit == "Kelvin" {
+                return inputTemp + 273.15
+            } else if outputUnit == "Celsius" {
+                return inputTemp
+            }
+        }
+        
+        //Fahrenheit
+        else if inputUnit == "Fahrenheit" {
+            if outputUnit == "Celsius" {
+                return ((inputTemp - 32) * 5) / 9
+            } else if outputUnit == "Kelvin" {
+                return (((inputTemp - 32) * 5) / 9) + 273.15
+            } else if outputUnit == "Fahrenheit" {
+                return inputTemp
+            }
+        }
+        
+        //Kelvin
+        else if inputUnit == "Kelvin" {
+            if outputUnit == "Celsius" {
+                return inputTemp - 273.15
+            } else if outputUnit == "Fahrenheit" {
+                return (((inputTemp - 273.15) * 9) / 5) + 32
+            } else if outputUnit == "Kelvin" {
+                return inputTemp
+            }
+        }
+        
+        return 0.0
+    }
     
-    // Celsius to Kelvin is done by adding 273.15
-    // Kelvin to Celsius is done by subtracting 273.15
-    
-    //Convert the input to Celsius, then convert from their to the target unit
-        //if conversion is to celsius, just return the value
-        //if conversion is to fahrenheit,
     var body: some View {
         
         //MARK: UI
-        
-        Form {
-            
-            //TODO: Text Field to enter a number
-            Section {
-                TextField("Input", value: $inputTemp, format: .number)
-                    .keyboardType(.decimalPad)
-            } header: {
-                Text("Input Temperature")
-            }
-            
-            //TODO: Segmented Control to choose input unit (Picker)
-            Section {
-                Picker("Input Unit", selection: $inputUnit) {
-                    ForEach(temperatureUnits, id: \.self) {
-                        Text($0)
+
+        NavigationView {
+            Form {
+                    
+                    //TODO: Text Field to enter a number
+                    Section {
+                        TextField("Input", value: $inputTemp, format: .number)
+                            .keyboardType(.decimalPad)
+                            .focused($amountIsFocused)
+                    } header: {
+                        Text("Input Temperature")
                     }
-                }.pickerStyle(.segmented)
-            } header: {
-                Text("Input Unit")
-            }
-            
-            //TODO: Segmented Control to choose output unit (Picker)
-            Section {
-                Picker("Output Unit", selection: $inputUnit) {
-                    ForEach(temperatureUnits, id: \.self) {
-                        Text($0)
+                    
+                    //TODO: Segmented Control to choose input unit (Picker)
+                    Section {
+                        Picker("Input Unit", selection: $inputUnit) {
+                            ForEach(temperatureUnits, id: \.self) {
+                                Text($0)
+                            }
+                        }.pickerStyle(.segmented)
+                    } header: {
+                        Text("Input Unit")
                     }
-                }.pickerStyle(.segmented)
-            } header: {
-                Text("Output Unit")
+                    
+                    //TODO: Segmented Control to choose output unit (Picker)
+                    Section {
+                        Picker("Output Unit", selection: $outputUnit) {
+                            ForEach(temperatureUnits, id: \.self) {
+                                Text($0)
+                            }
+                        }.pickerStyle(.segmented)
+                    } header: {
+                        Text("Output Unit")
+                    }
+                    
+                    //TODO: Text View to display result
+                    Section {
+                        Text(computeTemp, format: .number)
+                            .keyboardType(.decimalPad)
+                    } header: {
+                        Text("Output Temperature")
+                    }
+                    
+            }.navigationTitle("Temperature4U 🌡")
+            .toolbar {
+                        ToolbarItemGroup(placement: .keyboard) {
+                            Spacer()
+                            
+                            Button("Done") {
+                                amountIsFocused = false
+                            }
+                        }
             }
-            
-            //TODO: Text View to display result
-            Section {
-                TextField("Input", value: $inputTemp, format: .number)
-                    .keyboardType(.decimalPad)
-            } header: {
-                Text("Input Temperature")
-            }
-            
-        }.navigationTitle("Temperature4U 🌡")
+        }
     }
 }
 
