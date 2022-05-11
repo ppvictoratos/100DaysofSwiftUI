@@ -66,6 +66,7 @@ struct ContentView: View {
                 //See the total price
                 Section {
                     Text(grandTotal, format: localUSDDefault)
+                        .foregroundColor(tipPercentage == 0 ? Color.red : Color.black)
                 } header: {
                     Text("Grand Total")
                 }
