@@ -65,6 +65,14 @@ struct GridStack<Content: View>: View { //generics - you can provider any kind o
     }
 }
 
+struct BlueTitle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.largeTitle)
+            .foregroundColor(.blue)
+    }
+}
+
 extension View {
     func titleStyle() -> some View {
         modifier(Title())
@@ -72,6 +80,10 @@ extension View {
     
     func watermarked(with text: String) -> some View {
         modifier(Watermark(text: text))
+    }
+    
+    func blueTitle() -> some View {
+        modifier(BlueTitle())
     }
 }
 
@@ -94,6 +106,9 @@ struct ContentView: View {
                 
                 Text("Hello Again.")
                     .titleStyle()
+                
+                Text("Sup")
+                    .modifier(BlueTitle())
                 
                 Button(useAltText ? "Gray!" : "Mint!") {
                     useAltText.toggle()
